@@ -66,6 +66,8 @@ final class SimpleWikiParser extends WikiParser
      */
     def apply(page : WikiPage) : PageNode =
     {
+        if (page.format != null && page.format.nonEmpty && page.format != "text/x-wiki") throw new IllegalArgumentException("need format 'text/x-wiki', found '"+page.format+"'")
+        
         //Parse source
         val nodes = parseUntil(new Matcher(List(), true), new Source(page.source, page.title.language), 0)
 
@@ -221,8 +223,8 @@ final class SimpleWikiParser extends WikiParser
                 }
             }
 
-            lastPos = source.pos;
-            lastLine = source.line;
+            lastPos = source.pos
+            lastLine = source.line
         }
         
         nodes.reverse
@@ -649,7 +651,7 @@ final class SimpleWikiParser extends WikiParser
         }
         catch
         {
-            case _ => 1
+            case _ : NumberFormatException => 1
         }
     }
 

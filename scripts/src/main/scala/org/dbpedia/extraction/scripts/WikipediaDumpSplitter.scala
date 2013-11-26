@@ -2,7 +2,7 @@ package org.dbpedia.extraction.scripts
 
 import java.io._
 import org.dbpedia.extraction.util.RichFile.wrapFile
-import IOUtils._
+import org.dbpedia.extraction.util.IOUtils._
 import scala.collection.mutable.{ArrayBuffer}
 import scala.Console._
 import org.dbpedia.extraction.util.StringUtils._

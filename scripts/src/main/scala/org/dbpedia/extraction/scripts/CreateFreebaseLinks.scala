@@ -3,7 +3,7 @@ package org.dbpedia.extraction.scripts
 import scala.collection.mutable.{Set,HashSet}
 import java.io.{File,FileNotFoundException}
 import java.net.URI
-import org.dbpedia.extraction.util.{Finder,Language}
+import org.dbpedia.extraction.util.{IOUtils, Finder, Language}
 import org.dbpedia.extraction.util.TurtleUtils.escapeTurtle
 import org.dbpedia.extraction.util.StringUtils.{prettyMillis,formatCurrentTimestamp}
 import org.dbpedia.extraction.util.NumberUtils.hexToInt
@@ -13,7 +13,6 @@ import org.dbpedia.extraction.util.RichFile.wrapFile
 import org.dbpedia.extraction.destinations.{Dataset,DBpediaDatasets}
 import CreateFreebaseLinks._
 import scala.Console.err
-import IOUtils.{readLines,write}
 import java.util.regex.Matcher
 import java.lang.StringBuilder
 import collection.mutable
@@ -121,7 +120,7 @@ object CreateFreebaseLinks
     val start = System.nanoTime
     err.println((if (add) "Add" else "Subtract")+"ing DBpedia URIs in "+file+"...")
     var lines = 0
-    readLines(file) { line =>
+    IOUtils.readLines(file) { line =>
       if (line.nonEmpty && line.charAt(0) != '#') {
         val (rdfKey, wikiPageId) = line match {
           // This will match lines in the page_ids file
@@ -156,11 +155,11 @@ object CreateFreebaseLinks
     err.println("Searching for Freebase links in "+inFile+"...")
     var lines = 0
     var links = 0
-    val writer = write(outFile)
+    val writer = IOUtils.writer(outFile)
     try {
       // copied from org.dbpedia.extraction.destinations.formatters.TerseFormatter.footer
       writer.write("# started "+formatCurrentTimestamp+"\n")
-      readLines(inFile) { line =>
+      IOUtils.readLines(inFile) { line =>
         line match {
           case FreebaseWikipediaId(mid, wikiId) => {
             if (! mid.startsWith("m.")) throw new IllegalArgumentException(line)

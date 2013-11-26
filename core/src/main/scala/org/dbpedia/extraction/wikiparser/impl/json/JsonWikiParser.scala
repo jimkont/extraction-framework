@@ -1,7 +1,7 @@
 package org.dbpedia.extraction.wikiparser.impl.json
 
 import org.dbpedia.extraction.sources.WikiPage
-import org.dbpedia.extraction.wikiparser.{WikidataInterWikiLinkNode, Node, PageNode, WikiTitle}
+import org.dbpedia.extraction.wikiparser.{Node, PageNode, WikiTitle}
 import net.liftweb.json.DefaultFormats
 import net.liftweb.json.JsonParser._
 import scala.collection.mutable.{ArrayBuffer, HashMap}
@@ -71,7 +71,8 @@ class JsonWikiParser {
         Language.map.get(key) match {
           case Some(lang) =>
             val destinationTitle = WikiTitle.parse(key + ":" + value, lang)
-            nodes ::= WikidataInterWikiLinkNode(sourceTitle, destinationTitle)
+            //TODO comment in order to compile
+            //nodes ::= WikidataInterWikiLinkNode(sourceTitle, destinationTitle)
           case _ =>
         }
       case _ =>

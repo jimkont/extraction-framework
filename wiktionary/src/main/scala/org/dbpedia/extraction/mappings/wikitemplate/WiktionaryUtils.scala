@@ -6,7 +6,6 @@ import util.control.Breaks._
 import java.util.regex.Pattern
 import org.dbpedia.extraction.util.Language
 import org.dbpedia.extraction.wikiparser._
-import org.dbpedia.extraction.wikiparser.impl.simple.SimpleWikiParser
 import org.dbpedia.extraction.sources.WikiPage
 import org.dbpedia.extraction.mappings.WiktionaryPageExtractor
 
