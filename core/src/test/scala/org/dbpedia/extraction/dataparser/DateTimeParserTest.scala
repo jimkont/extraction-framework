@@ -582,7 +582,7 @@ class DateTimeParserTest extends FlatSpec with ShouldMatchers
     }
     
 
-    private val wikiParser = new impl.simple.SimpleWikiParser
+    private val wikiParser = WikiParser.getInstance()
 
     private def parse(language : String, datatype : String, input : String) : Option[String] =
     {

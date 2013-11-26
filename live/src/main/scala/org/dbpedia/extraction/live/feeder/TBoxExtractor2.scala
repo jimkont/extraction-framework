@@ -5,11 +5,12 @@ import org.apache.log4j.Logger
 import java.net.URI
 import com.hp.hpl.jena.rdf.model.{Resource, ResourceFactory, ModelFactory, Model}
 import org.dbpedia.extraction.sources.Source
-import org.dbpedia.extraction.wikiparser._
+import org.dbpedia.extraction.wikiparser.{WikiParser, WikiTitle, PageNode}
 import collection.mutable.MultiMap
 import com.hp.hpl.jena.shared.PrefixMapping
 import java.util.GregorianCalendar
 import com.hp.hpl.jena.vocabulary.DCTerms
+import org.dbpedia.extraction.wikiparser.Namespace
 import org.dbpedia.extraction.live.util.StringUtil
 
 /**
@@ -75,7 +76,7 @@ class TBoxExtractor2(val prefixMapping: PrefixMapping, val baseUri: String, val 
   }
 
   def handle(source: Source): Unit = {
-    handle(source.map(new impl.simple.SimpleWikiParser))
+    handle(source.map(WikiParser.getInstance()))
   }
 
   def handle(pageNodeSource: Traversable[PageNode]): Unit = {

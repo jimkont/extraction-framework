@@ -2,7 +2,6 @@ package org.dbpedia.extraction.ontology.io
 
 import java.util.logging.Logger
 import org.dbpedia.extraction.wikiparser._
-import org.dbpedia.extraction.wikiparser.impl.simple.SimpleWikiParser
 import org.dbpedia.extraction.ontology._
 import org.dbpedia.extraction.ontology.datatypes._
 import org.dbpedia.extraction.util.RichString.wrapString
@@ -20,7 +19,7 @@ class OntologyReader
     {
         logger.info("Loading ontology pages")
 
-        read(source.map(new SimpleWikiParser()))
+        read(source.map(WikiParser.getInstance()))
     }
 
     /**

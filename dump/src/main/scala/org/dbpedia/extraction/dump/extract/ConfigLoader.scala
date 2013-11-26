@@ -37,7 +37,7 @@ class ConfigLoader(config: Config)
       config.extractorClasses.view.map(e => createExtractionJob(e._1, e._2, parser))
     }
     
-    private val parser = new impl.simple.SimpleWikiParser
+    private val parser = WikiParser.getInstance(config.parser)
     
     /**
      * Creates ab extraction job for a specific language.
