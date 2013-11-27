@@ -97,14 +97,17 @@ object WikipediaDumpSplitter {
 
       readLines(index) { line =>
 
-        lines += 1
+        // org.dbpedia.extraction.util.IOUtils$.readLines now returns null for last line
+        if (line != null) {
+          lines += 1
 
-        // Should we use?
-        // - line.takeWhile(_ != ':')
-        // - line.split(":")(0)
-        offsets += line.substring(0, line.indexOf(':')).toLong
+          // Should we use?
+          // - line.takeWhile(_ != ':')
+          // - line.split(":")(0)
+          offsets += line.substring(0, line.indexOf(':')).toLong
 
-        if (lines % 10000 == 0) log(lines, offsets.size, start)
+          if (lines % 10000 == 0) log(lines, offsets.size, start)
+        }
       }
 
       offsetsSeq = offsets.toSeq
