@@ -43,7 +43,7 @@ class BooleanParserTest extends FlatSpec with ShouldMatchers
         parse("MONOTONE") should equal (None)
     }
 
-    private val parser = new impl.simple.SimpleWikiParser()
+    private val parser = WikiParser.getInstance()
 
     private def parse(input : String) : Option[Boolean] =
     {

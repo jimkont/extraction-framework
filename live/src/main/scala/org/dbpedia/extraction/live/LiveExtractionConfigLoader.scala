@@ -120,7 +120,7 @@ object LiveExtractionConfigLoader
     }
 
     //var liveDest : LiveUpdateDestination = null;
-    val parser = new impl.simple.SimpleWikiParser
+    val parser = WikiParser.getInstance()
     var complete = false;
 
     for (cpage <- articlesSource.map(parser))
