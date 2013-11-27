@@ -254,10 +254,10 @@ object Language extends (String => Language)
       "mappings",
       "en",
       // No DBpedia / RDF namespaces for mappings wiki. 
-      null,
-      null,
-      null,
-      null,
+      "mappings.dbpedia.org",
+      "http://mappings.dbpedia.org",
+      RdfNamespace.MAPPINGS,
+      RdfNamespace.MAPPINGS,
       "http://mappings.dbpedia.org",
       "http://mappings.dbpedia.org/api.php"
     )
