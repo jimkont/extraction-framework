@@ -95,10 +95,9 @@
         </dependency>
 
         <dependency>
-            <!-- TODO warning for incompatible version with scala 2.10.2 -->
             <groupId>net.liftweb</groupId>
-            <artifactId>lift-json_2.9.2</artifactId>
-            <version>2.5-M4</version>
+            <artifactId>lift-json_2.10</artifactId>
+            <version>2.5.1</version>
         </dependency>
 
     </dependencies>
