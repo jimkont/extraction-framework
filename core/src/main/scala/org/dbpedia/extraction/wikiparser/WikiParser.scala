@@ -1,7 +1,7 @@
 package org.dbpedia.extraction.wikiparser
 
 import org.dbpedia.extraction.sources.WikiPage
-import impl.WikiParserWrapper
+import org.dbpedia.extraction.wikiparser.impl.WikiParserWrapper
 
 /**
  * Parses WikiText source and builds an Abstract Syntax Tree.
@@ -24,10 +24,10 @@ trait WikiParser extends (WikiPage => PageNode)
  */
 object WikiParser
 {
-    /**
-     * Creates a new WikiParser instance.
-     */
-	def getInstance(name : String = null) : WikiParser =  {
+  /**
+   * Creates a new WikiParser instance.
+   */
+  def getInstance(name : String = null) : WikiParser =  {
     new WikiParserWrapper(name)
   }
 }
