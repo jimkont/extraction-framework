@@ -30,13 +30,14 @@ class WikiParserWrapper(wikiTextParserName: String) extends WikiParser {
   def apply(page : WikiPage) : PageNode =
   {
      page.format match {
-       case "text/x-wiki" =>
+       case "application/json" => jsonParser(page)
+       case _ =>
          if (wikiTextParserName == null || wikiTextParserName.equals("simple")){
            simpleWikiParser(page)
          } else {
            swebleWikiParser(page)
          }
-       case "application/json" => jsonParser(page)
+
      }
   }
 }
