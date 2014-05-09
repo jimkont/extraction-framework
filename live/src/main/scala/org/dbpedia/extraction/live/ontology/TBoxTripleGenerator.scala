@@ -1,15 +1,15 @@
-package org.dbpedia.extraction.live.feeder
+package org.dbpedia.extraction.live.ontology
 
 import org.dbpedia.extraction.wikiparser._
-import org.dbpedia.extraction.ontology._
 import org.dbpedia.extraction.sources.Source
 import com.hp.hpl.jena.shared.PrefixMapping
 import org.slf4j.LoggerFactory
 import collection.immutable.Traversable;
-import com.hp.hpl.jena.vocabulary.{RDF, RDFS, OWL}
+import com.hp.hpl.jena.vocabulary.{RDFS, OWL}
 import collection.mutable.{Set, Map, MultiMap, HashMap}
 import com.hp.hpl.jena.rdf.model.{ModelFactory, ResourceFactory, Resource, Model}
 import org.dbpedia.extraction.ontology.io.OntologyReader
+import scala.Some
 
 /**
  * This extractor extracts all properties from all infoboxes.

@@ -31,7 +31,7 @@
                         </launcher>
                         <launcher>
                             <id>ontologyUpdate</id>
-                            <mainClass>org.dbpedia.extraction.live.feeder.OntologyUpdateFeeder</mainClass>
+                            <mainClass>org.dbpedia.extraction.live.ontology.OntologyUpdateFeeder</mainClass>
                             <jvmArgs>
                                 <jvmArg>-Xmx2048m</jvmArg>
                             </jvmArgs>

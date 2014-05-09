@@ -1,4 +1,4 @@
-package org.dbpedia.extraction.live.feeder
+package org.dbpedia.extraction.live.ontology
 
 import java.lang.String
 import org.apache.log4j.Logger
@@ -11,6 +11,7 @@ import com.hp.hpl.jena.shared.PrefixMapping
 import java.util.GregorianCalendar
 import com.hp.hpl.jena.vocabulary.DCTerms
 import org.dbpedia.extraction.live.util.StringUtil
+import MyVocabulary
 
 /**
  * @author Claus Stadler
@@ -18,11 +19,11 @@ import org.dbpedia.extraction.live.util.StringUtil
  * Date: 9/16/11
  * Time: 4:13 PM
  */
-class TBoxExtractor2(val prefixMapping: PrefixMapping, val baseUri: String, val rootPrefix: String, val innerPrefix: String, val destination: TBoxTripleDestination) {
+class TBoxExtractor(val prefixMapping: PrefixMapping, val baseUri: String, val rootPrefix: String, val innerPrefix: String, val destination: TBoxTripleDestination) {
 
   def tripleGenerator = new TBoxTripleGenerator(prefixMapping)
 
-  private final val logger: Logger = Logger.getLogger(classOf[TBoxExtractor2])
+  private final val logger: Logger = Logger.getLogger(classOf[TBoxExtractor])
   private final val ONTOLOGY_PROPERTY: String = "OntologyProperty"
   private final val ONTOLOGY_CLASS: String = "OntologyClass"
 
@@ -32,7 +33,7 @@ class TBoxExtractor2(val prefixMapping: PrefixMapping, val baseUri: String, val 
   // private String innerPrefix;
   // private IPrefixResolver prefixResolver;
   //private var baseUri: String = null
-  final val extractorUri: URI = URI.create(MyVocabulary.NS + classOf[TBoxExtractor2].getSimpleName)
+  final val extractorUri: URI = URI.create(MyVocabulary.NS + classOf[TBoxExtractor].getSimpleName)
 
 
   def getRootName(title: WikiTitle) : String = {

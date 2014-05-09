@@ -1,9 +1,7 @@
-package org.dbpedia.extraction.live.feeder;
+package org.dbpedia.extraction.live.ontology;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
-
-import java.util.Set;
 
 
 public class RDFExpression

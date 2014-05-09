@@ -1,4 +1,4 @@
-package org.dbpedia.extraction.live.feeder;
+package org.dbpedia.extraction.live.ontology;
 
 import com.hp.hpl.jena.rdf.model.*;
 import com.hp.hpl.jena.rdf.model.impl.StatementImpl;
@@ -11,6 +11,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 import org.coode.owlapi.rdf.model.RDFGraph;
 import org.coode.owlapi.rdf.model.RDFTranslator;
+import org.dbpedia.extraction.live.feeder.ManchesterParse;
 import org.dbpedia.extraction.util.StringUtils;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.IRI;
@@ -57,19 +58,7 @@ public class RDFUtil
 		return generateMD5(str);
 	}
 
-	public static String generateMD5(String str)
-	{
-		md5.reset();
-		md5.update(str.getBytes());
-		byte[] result = md5.digest();
 
-		StringBuffer hexString = new StringBuffer();
-		for (int i = 0; i < result.length; i++) {
-			hexString.append(Integer.toHexString(0xFF & result[i]));
-		}
-		return hexString.toString();
-	}	
-	
 	private static Model stripTypeClass(Model result)
 	{
         result.remove(result.listStatements(null, RDF.type, OWL.Class).toList());

@@ -1,5 +1,4 @@
-package org.dbpedia.extraction.live.feeder;
-
+package org.dbpedia.extraction.live.ontology;
 
 
 public class DBpediaQLUtil

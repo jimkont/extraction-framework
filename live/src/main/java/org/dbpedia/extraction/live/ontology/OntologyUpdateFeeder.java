@@ -1,4 +1,4 @@
-package org.dbpedia.extraction.live.feeder;
+package org.dbpedia.extraction.live.ontology;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -8,6 +8,7 @@ import com.hp.hpl.jena.shared.PrefixMapping;
 import com.hp.hpl.jena.shared.impl.PrefixMappingImpl;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.PropertyConfigurator;
+import org.dbpedia.extraction.live.ontology.TBoxExtractor;
 import org.dbpedia.extraction.live.util.*;
 import org.dbpedia.extraction.live.util.sparql.ISparulExecutor;
 import org.dbpedia.extraction.live.util.sparql.VirtuosoJdbcSparulExecutor;
@@ -93,7 +94,7 @@ public class OntologyUpdateFeeder extends Thread {
         TBoxTripleDestination destination = new TBoxTripleDestination(executor, config.getDataGraphName(), config.getMetaGraphName(), config.getReifierPrefix());
 
 
-        TBoxExtractor2 extractor = new TBoxExtractor2(tmp, config.getBaseUri(), config.getRootPrefix(), config.getExpressionPrefix(), destination);
+        TBoxExtractor extractor = new TBoxExtractor(tmp, config.getBaseUri(), config.getRootPrefix(), config.getExpressionPrefix(), destination);
 
         String mappingsOAIUri = "http://mappings.dbpedia.org/index.php/Special:OAIRepository";
 
@@ -112,11 +113,11 @@ public class OntologyUpdateFeeder extends Thread {
 
 
     private Iterator<Document> recordIterator;
-    private TBoxExtractor2 extractor;
+    private TBoxExtractor extractor;
     private File lastResponseDateFile;
 
 
-    public OntologyUpdateFeeder(Iterator<Document> recordIterator, TBoxExtractor2 extractor, File lastResponseDateFile) {
+    public OntologyUpdateFeeder(Iterator<Document> recordIterator, TBoxExtractor extractor, File lastResponseDateFile) {
         this.recordIterator = recordIterator;
         this.extractor = extractor;
         this.lastResponseDateFile = lastResponseDateFile;
