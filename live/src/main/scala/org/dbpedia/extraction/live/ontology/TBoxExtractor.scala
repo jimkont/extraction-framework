@@ -11,7 +11,6 @@ import com.hp.hpl.jena.shared.PrefixMapping
 import java.util.GregorianCalendar
 import com.hp.hpl.jena.vocabulary.DCTerms
 import org.dbpedia.extraction.live.util.StringUtil
-import MyVocabulary
 
 /**
  * @author Claus Stadler
@@ -19,6 +18,7 @@ import MyVocabulary
  * Date: 9/16/11
  * Time: 4:13 PM
  */
+
 class TBoxExtractor(val prefixMapping: PrefixMapping, val baseUri: String, val rootPrefix: String, val innerPrefix: String, val destination: TBoxTripleDestination) {
 
   def tripleGenerator = new TBoxTripleGenerator(prefixMapping)
