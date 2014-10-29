@@ -1,28 +1,18 @@
 package org.dbpedia.extraction.config.mappings
 
+import org.dbpedia.extraction.ontology.{DBpediaNamespace, Ontology, OntologyProperty}
+
 
 object WikidataExtractorConfig{
 
-
-  type Property = String
-  type Value = String
-
-  type PropertyMapping = Map[Property, Property]
-
   val mapping = Map(
-    "P19" -> "http://dbpedia.org/property/birthPlace",
-    "P6" -> "http://dbpedia.org/property/governmentHead",
-    "P7" -> "http://dbpedia.org/property/brother",
-    "P434" -> "owl:sameAs"
+    "P19" -> new WdtkMapping(propertyTransformations =  List(new ReplaceFunction("dbo:birthPlace")), objectTransformations = List.empty),
+    "P434" -> new WdtkMapping(propertyTransformations = List(new ReplaceFunction(("owl:sameAs"))), objectTransformations = List.empty)
   )
 
-  def replace(property: Property,mapping: PropertyMapping): Property = {
-    mapping(property)
-  }
-
-  def addPrefix(prefix:Any, value:Value): Value = {
-    return prefix+value
-  }
+  val prefixMapping = Map(
+    "P434" -> "http://musicbrainz.org/artist/"
+  )
 
   object Use extends Enumeration {
     type Use = Value
@@ -35,4 +25,28 @@ object WikidataExtractorConfig{
 
 
 }
+
+trait TRansformationFunction {
+
+}
+
+class WdtkMapping(val propertyTransformations:List[TRansformationFunction],val objectTransformations: List[TRansformationFunction]) {
+  def applyAllpropertyTransformations = {
+  }
+
+  def applyAllObectTransformations = {
+
+  }
+}
+
+class ReplaceFunction(val newProperty:String) extends TRansformationFunction {
+  override def toString: String=
+    newProperty
+}
+
+class AddPrefix (val prefix:String, val value:String) extends TRansformationFunction {
+  override def toString: String =
+    prefix+value
+}
+
 
