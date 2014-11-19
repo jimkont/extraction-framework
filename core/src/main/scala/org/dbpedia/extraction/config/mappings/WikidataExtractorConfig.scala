@@ -1,52 +1,52 @@
 package org.dbpedia.extraction.config.mappings
 
-import org.dbpedia.extraction.ontology.{DBpediaNamespace, Ontology, OntologyProperty}
 
-
+//Test class of client
 object WikidataExtractorConfig{
 
-  val mapping = Map(
-    "P19" -> new WdtkMapping(propertyTransformations =  List(new ReplaceFunction("dbo:birthPlace")), objectTransformations = List.empty),
-    "P434" -> new WdtkMapping(propertyTransformations = List(new ReplaceFunction(("owl:sameAs"))), objectTransformations = List.empty)
+  val test1= new WdtkMapping(propertyTransformations =  List(new ReplaceFunction("dbo:birthPlace")), objectTransformations = List.empty)
+ // val test2 =
+
+  def mapping(value:String="") = Map(
+    "P19" -> test1.executeAll()
+  //  "P434" -> new WdtkMapping(propertyTransformations = List(new ReplaceFunction(("owl:sameAs"))), objectTransformations = List(new AddPrefixFunction("http://musicbrainz.org/artist/", value)))
   )
-
-  val prefixMapping = Map(
-    "P434" -> "http://musicbrainz.org/artist/"
-  )
-
-  object Use extends Enumeration {
-    type Use = Value
-    val rdfType= Value("rdf:type")
-    val geoSpatialThing = Value("geo:SpatialThing")
-    val geoLat = Value("geo:lat")
-    val geoLong = Value("geo:long")
-    val georss = Value("georss:point")
-  }
-
-
 }
 
+//The Command Interface
 trait TRansformationFunction {
-
+  def execute()
 }
 
+//The Invoker Class
 class WdtkMapping(val propertyTransformations:List[TRansformationFunction],val objectTransformations: List[TRansformationFunction]) {
-  def applyAllpropertyTransformations = {
-  }
+  def executeAll(): Unit = {
+    for (propertyTrans <- propertyTransformations) {
+      propertyTrans.execute()
+    }
 
-  def applyAllObectTransformations = {
-
+    for (objTrans <- objectTransformations) {
+      objTrans.execute()
+    }
   }
 }
 
-class ReplaceFunction(val newProperty:String) extends TRansformationFunction {
-  override def toString: String=
-    newProperty
+
+//The Receiver class
+class Functions {
+
 }
 
-class AddPrefix (val prefix:String, val value:String) extends TRansformationFunction {
-  override def toString: String =
-    prefix+value
+//Concrete command class
+class ReplaceFunction(newValue:String="") extends TRansformationFunction {
+  def replace():String = newValue
+  def execute() = replace()
+}
+
+//Concrete command class
+class AddPrefixFunction (prefix:String="", value:String="") extends TRansformationFunction {
+  def addPrefix():String = prefix + value
+  def execute() = addPrefix()
 }
 
 
