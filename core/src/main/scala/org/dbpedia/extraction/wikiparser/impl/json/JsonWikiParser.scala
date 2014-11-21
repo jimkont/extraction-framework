@@ -2,14 +2,10 @@ package org.dbpedia.extraction.wikiparser.impl.json
 
 import org.dbpedia.extraction.sources.WikiPage
 import org.dbpedia.extraction.wikiparser.{Node, PageNode, WikiTitle,JsonNode}
-import org.json.JSONObject
-import org.wikidata.wdtk.datamodel.implementation.DataObjectFactoryImpl
-import org.wikidata.wdtk.datamodel.interfaces.{Claim, ItemDocument}
-import org.wikidata.wdtk.dumpfiles.JsonConverter
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.wikidata.wdtk.datamodel.json.jackson.JacksonItemDocument
 import scala.collection.mutable.{ArrayBuffer, HashMap}
 import scala.util.matching.Regex
-import org.dbpedia.extraction.destinations.{DBpediaDatasets, Quad}
-import org.dbpedia.extraction.util.Language
 
 import JsonWikiParser._
 
@@ -25,7 +21,7 @@ object JsonWikiParser {
   /* the regex should search for languageslinks like "enwiki" only
   so that "enwikivoyage" for example wouldn't be acceptable because they wouldn't match a DBpedia entity
   */
-  private val WikiLanguageRegex = """([^\s]+)wiki$""".r
+  private val WikiLanguageRegex = """([^\s]+)wiki$"""
 }
 
 /**
@@ -43,11 +39,13 @@ class JsonWikiParser {
     }
     else
     {
-      val IntRegEx = new Regex("(\\d+)")
-      val jsonObject : JSONObject  = new JSONObject(page.source)
-      val jsonConverter = new JsonConverter("http://data.dbpedia.org/resource", new DataObjectFactoryImpl())
-      val Some(title) = IntRegEx findFirstIn page.title.toString()
-      val itemDocument : ItemDocument = jsonConverter.convertToItemDocument(jsonObject, "Q"+title)
+
+      val mapper = new ObjectMapper()
+      val jsonString : java.lang.String = page.source
+      val itemDocument : JacksonItemDocument = mapper.readValue(jsonString, classOf[JacksonItemDocument])
+      //val jsonConverter = new JsonConverter("http://data.dbpedia.org/resource", new DataObjectFactoryImpl())
+      //val Some(title) = IntRegEx findFirstIn page.title.toString()
+      //val itemDocument : ItemDocument = jsonConverter.convertToItemDocument(jsonObject, "Q"+title)
       Some(new JsonNode(page,itemDocument))
     }
   }
