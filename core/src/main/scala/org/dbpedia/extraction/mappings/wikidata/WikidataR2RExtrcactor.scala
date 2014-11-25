@@ -33,27 +33,26 @@ class WikidataR2RExtrcactor(
   {
     // This array will hold all the triples we will extract
     val quads = new ArrayBuffer[Quad]()
-//    for ((statementGroup) <- page.wikiDataItem.getStatementGroups) {
-//
-////      val claim = statementGroup.getStatements().get(0).getClaim()
-////      val property = claim.getMainSnak().getPropertyId().toString().replace("(PropertyId)", "")
-////      val propID=property.replace("http://data.dbpedia.org/resource/","")
-////      claim.getMainSnak() match {
-////        case mainSnak: ValueSnak => {
-////          mainSnak.getValue() match {
-////            case value: ItemIdValue => {
-////                 val p = WikidataExtractorConfig.mapping().get("P19")
-////                 println(p)
-//////                val o =
-////                //quads += new Quad(context.language, WikidataTestDataSet, subjectUri, p, o, page.wikiPage.sourceUri, null)
-////
-////            }
-////            case _ =>
-////          }
-////        }
-////        case _ =>
-////      }
-//    }
+    for ((statementGroup) <- page.wikiDataItem.getStatementGroups) {
+      //println(statementGroup)
+      val claim = statementGroup.getStatements().get(0).getClaim()
+      val property = claim.getMainSnak().getPropertyId().toString().replace("(property)", "")
+      val propID=property.replace("http://data.dbpedia.org/resource/","")
+      claim.getMainSnak() match {
+        case mainSnak: ValueSnak => {
+          mainSnak.getValue() match {
+            case value: ItemIdValue => {
+                val p = WikidataExtractorConfig.conf(propID.trim)
+                val o =value.toString.replace("(item)", "")
+                quads += new Quad(context.language, WikidataTestDataSet, subjectUri, p, o, page.wikiPage.sourceUri, null)
+
+            }
+            case _ =>
+          }
+        }
+        case _ =>
+      }
+    }
     quads
   }
 
