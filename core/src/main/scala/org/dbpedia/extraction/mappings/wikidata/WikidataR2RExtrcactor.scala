@@ -42,8 +42,10 @@ class WikidataR2RExtrcactor(
         case mainSnak: ValueSnak => {
           mainSnak.getValue() match {
             case value: ItemIdValue => {
-                val p = WikidataExtractorConfig.conf(propID.trim)
-                val o =value.toString.replace("(item)", "")
+                val p = WikidataExtractorConfig.conf(propID.trim, "", "property")
+                val newValue =value.toString.replace("http://data.dbpedia.org/resource/", ""). replace("(item)", "")
+                val o = WikidataExtractorConfig.conf(propID.trim,newValue, "value")
+                if (propID.trim =="P19" || propID.trim=="P21")
                 quads += new Quad(context.language, WikidataTestDataSet, subjectUri, p, o, page.wikiPage.sourceUri, null)
 
             }
