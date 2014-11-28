@@ -1,5 +1,7 @@
 package org.dbpedia.extraction.config.mappings
 
+import scala.collection.mutable
+
 
 /**
  * Created by ali on 11/22/14.
@@ -9,50 +11,47 @@ package org.dbpedia.extraction.config.mappings
 //Test class of client
 object WikidataExtractorConfig{
 
-  def conf(property:String="", value:String="", appliesTo:String):String= {
-
-     var mapResult=""
+  def conf(property:String="", value:String="", appliesTo:String):mutable.Map[String,String]= {
     //Sample Config files
     val configFileExample = List("replace property P19 dbo:birthPlace", "addprefix value P21 http://example.com/")
 
+    var testData=""
+    if (appliesTo=="property") testData=property
+    else testData=value
+
+    //println(testData)
+    val result:WikidataMapping=new WikidataMapping(testData, appliesTo)
     val myMapping:WdtkMapping = new WdtkMapping()
 
     for (eachLine <- configFileExample ) {
       configSplit(eachLine)
       val eachCmd = configSplit.eachCmd
       val confProperty=configSplit.property
+      val applies=configSplit.appliesTo
       val newParam = configSplit.newParam
 
-      var testData=""
-      if (appliesTo=="property") testData=property
-      else testData=value
-
-     //println(testData)
-     val result:WikidataMapping=new WikidataMapping(testData)
         //Create all avialable commands
      val repCommand:ReplaceFunction = new ReplaceFunction(result)
      val addPrefix:AddPrefixFunction = new AddPrefixFunction(result)
 
       eachCmd match {
         case "replace" => {
-          if (property==confProperty){
+          if (property==confProperty && appliesTo==applies){
             result.setReplaceParameters(confProperty,newParam)
             myMapping.executeCommand(repCommand)
-            mapResult=result.testMap
           }
         }
         case "addprefix" => {
-          if (property==confProperty){
+          if (property==confProperty && appliesTo == applies){
             result.setPrefix(newParam)
             myMapping.executeCommand(addPrefix)
-            mapResult=result.testMap
           }
         }
         case _=> // do nothing
       }
     }
-
-    mapResult
+//    println(result.testMap)
+    result.testMap
   }
 
   object configSplit {
@@ -86,9 +85,9 @@ class WdtkMapping() {
 
 
 //The Receiver class
-class WikidataMapping(testData:String) {
+class WikidataMapping(testData:String, appliesTo:String="") {
 
-  var testMap:String=""
+  val testMap=mutable.Map.empty[String,String]
   var OldString:String=""
   var NewString:String=""
   var prefix =""
@@ -107,14 +106,14 @@ class WikidataMapping(testData:String) {
 
   def replace (){
     testData match {
-      case checkPoint => testMap=NewString
+      case checkPoint => testMap +=(appliesTo -> NewString)
       case _=>
     }
 
   }
 
   def addPrefix() {
-    testMap=prefix + testData
+    testMap += (appliesTo -> (prefix + testData))
   }
 
 }

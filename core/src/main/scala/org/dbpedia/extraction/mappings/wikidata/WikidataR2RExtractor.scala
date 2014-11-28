@@ -15,7 +15,7 @@ import scala.language.reflectiveCalls
 /**
  * Created by ali on 10/26/14.
  */
-class WikidataR2RExtrcactor(
+class WikidataR2RExtractor(
                                context : {
                                       def ontology : Ontology
                                       def language : Language
@@ -42,11 +42,16 @@ class WikidataR2RExtrcactor(
         case mainSnak: ValueSnak => {
           mainSnak.getValue() match {
             case value: ItemIdValue => {
-                val p = WikidataExtractorConfig.conf(propID.trim, "", "property")
-                val newValue =value.toString.replace("http://data.dbpedia.org/resource/", ""). replace("(item)", "")
-                val o = WikidataExtractorConfig.conf(propID.trim,newValue, "value")
-                if (propID.trim =="P19" || propID.trim=="P21")
-                quads += new Quad(context.language, WikidataTestDataSet, subjectUri, p, o, page.wikiPage.sourceUri, null)
+              if (propID.trim =="P19" || propID.trim=="P21"){
+                val p = WikidataExtractorConfig.conf(propID.trim, "", "property").getOrElse("property",property)
+                println(subjectUri)
+                val newValue =value.toString.replace("(item)", "")
+                val o = WikidataExtractorConfig.conf(propID.trim,newValue.replace("http://data.dbpedia.org/resource/", ""), "value").getOrElse("value", newValue)
+
+                quads += new Quad(context.language, WikidataTestDataSet, subjectUri, p.trim, o.trim, page.wikiPage.sourceUri, null)
+
+              }
+
 
             }
             case _ =>
