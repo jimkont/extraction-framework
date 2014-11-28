@@ -40,25 +40,16 @@ class WikidataR2RExtractor(
       val propID=property.replace("http://data.dbpedia.org/resource/","")
       claim.getMainSnak() match {
         case mainSnak: ValueSnak => {
-          mainSnak.getValue() match {
-            case value: ItemIdValue => {
-              if (propID.trim =="P19" || propID.trim=="P21"){
-                val p = WikidataExtractorConfig.conf(propID.trim, "", "property").getOrElse("property",property)
-                println(subjectUri)
-                val newValue =value.toString.replace("(item)", "")
-                val o = WikidataExtractorConfig.conf(propID.trim,newValue.replace("http://data.dbpedia.org/resource/", ""), "value").getOrElse("value", newValue)
+              val value = mainSnak.getValue
+              val p = WikidataExtractorConfig.conf(propID.trim, "", "property").getOrElse("property",property)
+              val newValue =value.toString.replace("(item)", "")
+              val o = WikidataExtractorConfig.conf(propID.trim,newValue.replace("http://data.dbpedia.org/resource/", ""), "value").getOrElse("value", newValue)
 
-                quads += new Quad(context.language, WikidataTestDataSet, subjectUri, p.trim, o.trim, page.wikiPage.sourceUri, null)
-
-              }
-
-
+              quads += new Quad(context.language, WikidataTestDataSet, subjectUri, p.trim, o.trim, page.wikiPage.sourceUri, null)
             }
-            case _ =>
-          }
-        }
         case _ =>
-      }
+        }
+
     }
     quads
   }

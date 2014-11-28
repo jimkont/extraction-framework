@@ -13,7 +13,29 @@ object WikidataExtractorConfig{
 
   def conf(property:String="", value:String="", appliesTo:String):mutable.Map[String,String]= {
     //Sample Config files
-    val configFileExample = List("replace property P19 dbo:birthPlace", "addprefix value P21 http://example.com/")
+    val configFileExample = List("replace property P19 dbo:birthPlace",
+      "replace property P6 dbo:governmentHead",
+      "replace property P7 dbo:brother",
+      "replace property P17 dbo:country",
+      "replace property P20 dbo:deathPlace",
+      "replace property P434 owl:sameAs",
+      "replace property P435 owl:sameAs",
+      "replace property P436 owl:sameAs",
+      "replace property P982 owl:sameAs",
+      "replace property P966 owl:sameAs",
+      "replace property 1004 owl:sameAs",
+      "replace property P661 owl:sameAs",
+      "replace property P646 owl:sameAs",
+
+      "addprefix value P646 http://freebase.com",
+      "addprefix value P434 http://musicbrainz.org/artist/",
+      "addprefix value P435 http://musicbrainz.org/work/",
+      "addprefix value P436 http://musicbrainz.org/release-group/",
+      "addprefix value P982 http://musicbrainz.org/area/",
+      "addprefix value P966 http://musicbrainz.org/label/",
+      "addprefix value P1004 http://musicbrainz.org/place/",
+      "addprefix value P661 http://rdf.chemspider.com/"
+    )
 
     var testData=""
     if (appliesTo=="property") testData=property
@@ -113,7 +135,8 @@ class WikidataMapping(testData:String, appliesTo:String="") {
   }
 
   def addPrefix() {
-    testMap += (appliesTo -> (prefix + testData))
+    if (appliesTo=="value") testMap += (appliesTo -> (prefix + testData.replace("\"", "")))
+    else testMap += (appliesTo -> (prefix + testData))
   }
 
 }
