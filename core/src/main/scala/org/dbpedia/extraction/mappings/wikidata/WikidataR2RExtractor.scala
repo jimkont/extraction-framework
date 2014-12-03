@@ -3,7 +3,7 @@ package org.dbpedia.extraction.mappings
 import org.dbpedia.extraction.config.mappings.{ReplaceFunction, WikidataExtractorConfig}
 import org.dbpedia.extraction.destinations.{Dataset, Quad}
 import org.dbpedia.extraction.mappings.{JsonNodeExtractor, PageContext}
-import org.dbpedia.extraction.ontology.Ontology
+import org.dbpedia.extraction.ontology.{OntologyProperty, Ontology}
 import org.dbpedia.extraction.util.Language
 import org.dbpedia.extraction.wikiparser.JsonNode
 import org.wikidata.wdtk.datamodel.interfaces._
@@ -23,6 +23,8 @@ class WikidataR2RExtractor(
                             )
   extends JsonNodeExtractor
 {
+  // Here we define all the ontology predicates we will use
+  private val sameAsProperty = context.ontology.properties("owl:sameAs")
 
   // this is where we will store the output
   val WikidataTestDataSet = new Dataset("wikidata-r2r")
@@ -36,16 +38,26 @@ class WikidataR2RExtractor(
     for ((statementGroup) <- page.wikiDataItem.getStatementGroups) {
       //println(statementGroup)
       val claim = statementGroup.getStatements().get(0).getClaim()
-      val property = claim.getMainSnak().getPropertyId().toString().replace("(property)", "")
-      val propID=property.replace("http://data.dbpedia.org/resource/","")
+      val property = claim.getMainSnak().getPropertyId().toString().replace("(property)", "").trim
+
+      getDBpediaSameasProperties(property).foreach {
+        dbProp => WikidataExtractorConfig.configFileExample+= "replace property " + property + " " + dbProp
+      }
+      val p = WikidataExtractorConfig.conf(property, "", "property").getOrElse("property",property)
+
+
       claim.getMainSnak() match {
         case mainSnak: ValueSnak => {
               val value = mainSnak.getValue
-              val p = WikidataExtractorConfig.conf(propID.trim, "", "property").getOrElse("property",property)
-              val newValue =value.toString.replace("(item)", "")
-              val o = WikidataExtractorConfig.conf(propID.trim,newValue.replace("http://data.dbpedia.org/resource/", ""), "value").getOrElse("value", newValue)
+              println(value.getClass)
+              val newValue =value.toString.replace("(item)", "").replace("\"", "").trim
+              val o = WikidataExtractorConfig.conf(property, newValue, "value").getOrElse("value", newValue)
+              p match {
+                  case "owlSameAs" => quads += new Quad(context.language, WikidataTestDataSet, subjectUri, sameAsProperty, o, page.wikiPage.sourceUri, null)
+                  case p if p.startsWith("http://dbpedia.org/ontology/")=> quads += new Quad(context.language, WikidataTestDataSet, subjectUri, p, o, page.wikiPage.sourceUri, null)
+                  case _=> quads += new Quad(context.language, WikidataTestDataSet, subjectUri, p, o, page.wikiPage.sourceUri, context.ontology.datatypes("xsd:string"))
+              }
 
-              quads += new Quad(context.language, WikidataTestDataSet, subjectUri, p.trim, o.trim, page.wikiPage.sourceUri, null)
             }
         case _ =>
         }
@@ -54,5 +66,18 @@ class WikidataR2RExtractor(
     quads
   }
 
+  def getDBpediaSameasProperties(property:String) : Set[OntologyProperty] =
+  {
+    val p = property.replace("http://data.dbpedia.org/resource","http://wikidata.dbpedia.org/resource")
+    var properties = Set[OntologyProperty]()
+    context.ontology.equivalentPropertiesMap.foreach({map =>
+      if (map._1.toString.matches(p)) {
+        map._2.foreach { mappedProp =>
+          properties += mappedProp
+        }
+      }
+    })
+    properties
+  }
 }
 

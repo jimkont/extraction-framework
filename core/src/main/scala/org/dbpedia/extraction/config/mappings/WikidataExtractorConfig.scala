@@ -11,31 +11,28 @@ import scala.collection.mutable
 //Test class of client
 object WikidataExtractorConfig{
 
-  def conf(property:String="", value:String="", appliesTo:String):mutable.Map[String,String]= {
-    //Sample Config files
-    val configFileExample = List("replace property P19 dbo:birthPlace",
-      "replace property P6 dbo:governmentHead",
-      "replace property P7 dbo:brother",
-      "replace property P17 dbo:country",
-      "replace property P20 dbo:deathPlace",
-      "replace property P434 owl:sameAs",
-      "replace property P435 owl:sameAs",
-      "replace property P436 owl:sameAs",
-      "replace property P982 owl:sameAs",
-      "replace property P966 owl:sameAs",
-      "replace property 1004 owl:sameAs",
-      "replace property P661 owl:sameAs",
-      "replace property P646 owl:sameAs",
+  //Sample Config files
+  val configFileExample = mutable.MutableList(
+    "replace property http://data.dbpedia.org/resource/P434 owlSameAs",
+    "replace property http://data.dbpedia.org/resource/P435 owlSameAs",
+    "replace property http://data.dbpedia.org/resource/P436 owlSameAs",
+    "replace property http://data.dbpedia.org/resource/P982 owlSameAs",
+    "replace property http://data.dbpedia.org/resource/P966 owlSameAs",
+    "replace property http://data.dbpedia.org/resource/1004 owlSameAs",
+    "replace property http://data.dbpedia.org/resource/P661 owlSameAs",
+    "replace property http://data.dbpedia.org/resource/P646 owlSameAs",
 
-      "addprefix value P646 http://freebase.com",
-      "addprefix value P434 http://musicbrainz.org/artist/",
-      "addprefix value P435 http://musicbrainz.org/work/",
-      "addprefix value P436 http://musicbrainz.org/release-group/",
-      "addprefix value P982 http://musicbrainz.org/area/",
-      "addprefix value P966 http://musicbrainz.org/label/",
-      "addprefix value P1004 http://musicbrainz.org/place/",
-      "addprefix value P661 http://rdf.chemspider.com/"
-    )
+    "addprefix value http://data.dbpedia.org/resource/P646 http://freebase.com",
+    "addprefix value http://data.dbpedia.org/resource/P434 http://musicbrainz.org/artist/",
+    "addprefix value http://data.dbpedia.org/resource/P435 http://musicbrainz.org/work/",
+    "addprefix value http://data.dbpedia.org/resource/P436 http://musicbrainz.org/release-group/",
+    "addprefix value http://data.dbpedia.org/resource/P982 http://musicbrainz.org/area/",
+    "addprefix value http://data.dbpedia.org/resource/P966 http://musicbrainz.org/label/",
+    "addprefix value http://data.dbpedia.org/resource/P1004 http://musicbrainz.org/place/",
+    "addprefix value http://data.dbpedia.org/resource/P661 http://rdf.chemspider.com/"
+  )
+
+  def conf(property:String="", value:String="", appliesTo:String):mutable.Map[String,String]= {
 
     var testData=""
     if (appliesTo=="property") testData=property
@@ -113,12 +110,16 @@ class WikidataMapping(testData:String, appliesTo:String="") {
   var OldString:String=""
   var NewString:String=""
   var prefix =""
-
+  var suffix =""
 
   val checkPoint = OldString
 
   def setPrefix(prefix:String): Unit ={
     this.prefix=prefix
+  }
+
+  def setSuffix(suffix: String): Unit = {
+    this.suffix=suffix
   }
 
   def setReplaceParameters(oldStr:String,newString:String){
@@ -135,10 +136,12 @@ class WikidataMapping(testData:String, appliesTo:String="") {
   }
 
   def addPrefix() {
-    if (appliesTo=="value") testMap += (appliesTo -> (prefix + testData.replace("\"", "")))
-    else testMap += (appliesTo -> (prefix + testData))
+    testMap += (appliesTo -> (prefix + testData))
   }
 
+  def addSuffix(): Unit = {
+    testMap += (appliesTo -> (testData+ suffix))
+  }
 }
 
 //Concrete command class
@@ -156,3 +159,8 @@ class AddPrefixFunction (mapping:WikidataMapping) extends TRansformationFunction
   }
 }
 
+class AddSuffixFunction (mapping:WikidataMapping) extends TRansformationFunction {
+  def execute(): Unit = {
+    mapping.addSuffix()
+  }
+}
