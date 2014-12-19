@@ -25,6 +25,11 @@ class WikidataR2RExtractor(
 {
   // Here we define all the ontology predicates we will use
   private val sameAsProperty = context.ontology.properties("owl:sameAs")
+  private val rdfTypeProperty = context.ontology.properties("rdf:type")
+  private val geoLatProperty = context.ontology.properties("geo:lat")
+  private val geoLongProperty = context.ontology.properties("geo:long")
+  private val geoRssProperty = context.ontology.properties("georss:point")
+  private val featureOntClass = context.ontology.classes("geo:SpatialThing")
 
   // this is where we will store the output
   val WikidataTestDataSet = new Dataset("wikidata-r2r")
@@ -40,30 +45,55 @@ class WikidataR2RExtractor(
       val claim = statementGroup.getStatements().get(0).getClaim()
       val property = claim.getMainSnak().getPropertyId().toString().replace("(property)", "").trim
 
-      getDBpediaSameasProperties(property).foreach {
-        dbProp => WikidataExtractorConfig.configFileExample+= "replace property " + property + " " + dbProp
-      }
-      val p = WikidataExtractorConfig.conf(property, "", "property").getOrElse("property",property)
+//      getDBpediaSameasProperties(property).foreach {
+//        dbProp => {
+//          if (property != "http://data.dbpedia.org/resource/P625") WikidataExtractorConfig.configFileExample+= "replace property " + property + " " + dbProp
+//        }
+//      }
+      WikidataExtractorConfig.conf(property, "", "property") //set property
 
 
       claim.getMainSnak() match {
         case mainSnak: ValueSnak => {
-              val value = mainSnak.getValue
-              println(value.getClass)
-              val newValue =value.toString.replace("(item)", "").replace("\"", "").trim
-              val o = WikidataExtractorConfig.conf(property, newValue, "value").getOrElse("value", newValue)
-              p match {
-                  case "owlSameAs" => quads += new Quad(context.language, WikidataTestDataSet, subjectUri, sameAsProperty, o, page.wikiPage.sourceUri, null)
-                  case p if p.startsWith("http://dbpedia.org/ontology/")=> quads += new Quad(context.language, WikidataTestDataSet, subjectUri, p, o, page.wikiPage.sourceUri, null)
-                  case _=> quads += new Quad(context.language, WikidataTestDataSet, subjectUri, p, o, page.wikiPage.sourceUri, context.ontology.datatypes("xsd:string"))
-              }
+          val value = mainSnak.getValue.toString.replace("(item)", "").replace("\"", "").trim
+          WikidataExtractorConfig.conf(property, value, "value") //set value
 
+          WikidataExtractorConfig.MapResult.get(property).foreach(map =>
+          {
+            if (!map.isEmpty) map.foreach {
+              kv => {
+                val mappedValue = kv._2 match {
+                  case s => s
+                  case _=> value
+                }
+                val mappedProperty = propertyStringMatch(kv._1)
+                quads += new Quad(context.language, WikidataTestDataSet, subjectUri,mappedProperty.toString, mappedValue.toString, page.wikiPage.sourceUri, null)
+              }
             }
-        case _ =>
+          }
+          )
+
+//          p match {
+//            case "owlSameAs" => quads += new Quad(context.language, WikidataTestDataSet, subjectUri, sameAsProperty, o, page.wikiPage.sourceUri, null)
+//            case p if p.startsWith("http://dbpedia.org/ontology/") => quads += new Quad(context.language, WikidataTestDataSet, subjectUri, p, o, page.wikiPage.sourceUri, null)
+//            case _ => quads += new Quad(context.language, WikidataTestDataSet, subjectUri, p, o, page.wikiPage.sourceUri, context.ontology.datatypes("xsd:string"))
+//          }
+
         }
+        case _ =>
+      }
 
     }
     quads
+  }
+
+  def propertyStringMatch(newProperty: String = "") = newProperty match {
+      case "owlSameAs" => sameAsProperty
+      case "rdfType" => rdfTypeProperty
+      case "geoLat" => geoLatProperty
+      case "geoLong" => geoLongProperty
+      case "geoRss" => geoRssProperty
+      case _ => newProperty
   }
 
   def getDBpediaSameasProperties(property:String) : Set[OntologyProperty] =
