@@ -1,6 +1,8 @@
 package org.dbpedia.extraction.mappings
 
-import org.dbpedia.extraction.config.mappings.{ReplaceFunction, WikidataExtractorConfig}
+import java.io._
+
+import org.dbpedia.extraction.config.mappings.wikidata._
 import org.dbpedia.extraction.destinations.{Dataset, Quad}
 import org.dbpedia.extraction.mappings.{JsonNodeExtractor, PageContext}
 import org.dbpedia.extraction.ontology.{OntologyProperty, Ontology}
@@ -9,6 +11,7 @@ import org.dbpedia.extraction.wikiparser.JsonNode
 import org.wikidata.wdtk.datamodel.interfaces._
 
 import scala.collection.JavaConversions._
+import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 import scala.language.reflectiveCalls
 
@@ -40,49 +43,46 @@ class WikidataR2RExtractor(
   {
     // This array will hold all the triples we will extract
     val quads = new ArrayBuffer[Quad]()
-    for ((statementGroup) <- page.wikiDataItem.getStatementGroups) {
-      //println(statementGroup)
-      val claim = statementGroup.getStatements().get(0).getClaim()
-      val property = claim.getMainSnak().getPropertyId().toString().replace("(property)", "").trim
+    val config:WikidataExtractorConfig= WikidataExtractorConfigFactory.createConfig("config.txt")
+    val receiver:WikidataCommandReceiver = new WikidataCommandReceiver
 
+
+    for ((statementGroup) <- page.wikiDataItem.getStatementGroups) {
+      val claim = statementGroup.getStatements().get(0).getClaim()
+      val property = claim.getMainSnak().getPropertyId().toString().replace("(property)", "").
+        replace("http://data.dbpedia.org/resource/", "").trim
+//      var data=""
 //      getDBpediaSameasProperties(property).foreach {
 //        dbProp => {
-//          if (property != "http://data.dbpedia.org/resource/P625") WikidataExtractorConfig.configFileExample+= "replace property " + property + " " + dbProp
+//          if (property != "http://data.dbpedia.org/resource/P625") {
+//            data = property.replace("http://data.dbpedia.org/resource/", "").trim + " " + "{" + dbProp + "}"
+//          }
+//
 //        }
 //      }
-      WikidataExtractorConfig.conf(property, "", "property") //set property
-
-
+//      val fw = new FileWriter("example.txt", true)
+//      fw.write(data)
+//      fw.write("\n")
+//      fw.close()
       claim.getMainSnak() match {
         case mainSnak: ValueSnak => {
-          val value = mainSnak.getValue.toString.replace("(item)", "").replace("\"", "").trim
-          WikidataExtractorConfig.conf(property, value, "value") //set value
-
-          WikidataExtractorConfig.MapResult.get(property).foreach(map =>
-          {
-            if (!map.isEmpty) map.foreach {
-              kv => {
-                val mappedValue = kv._2 match {
-                  case s => s
-                  case _=> value
-                }
-                val mappedProperty = propertyStringMatch(kv._1)
-                quads += new Quad(context.language, WikidataTestDataSet, subjectUri,mappedProperty.toString, mappedValue.toString, page.wikiPage.sourceUri, null)
-              }
-            }
-          }
-          )
-
-//          p match {
-//            case "owlSameAs" => quads += new Quad(context.language, WikidataTestDataSet, subjectUri, sameAsProperty, o, page.wikiPage.sourceUri, null)
-//            case p if p.startsWith("http://dbpedia.org/ontology/") => quads += new Quad(context.language, WikidataTestDataSet, subjectUri, p, o, page.wikiPage.sourceUri, null)
-//            case _ => quads += new Quad(context.language, WikidataTestDataSet, subjectUri, p, o, page.wikiPage.sourceUri, context.ontology.datatypes("xsd:string"))
-//          }
-
+          val value = mainSnak.getValue //.toString.replace("(item)", "").replace("\"", "").trim
+          val command:WikidataTransformationCommands = config.getCommand(property,value, receiver)
+          command.execute()
+          quads ++=getQuad(page, subjectUri, receiver.getMap())
         }
+
         case _ =>
       }
 
+    }
+    quads
+  }
+
+  def getQuad(page : JsonNode, subjectUri : String, map:mutable.Map[String,String]): ArrayBuffer[Quad] = {
+    val quads = new ArrayBuffer[Quad]()
+    map.foreach {
+      propertyValue => quads +=new Quad(context.language, WikidataTestDataSet, subjectUri,propertyValue._1, propertyValue._2, page.wikiPage.sourceUri,context.ontology.datatypes("xsd:string"))
     }
     quads
   }
@@ -95,6 +95,7 @@ class WikidataR2RExtractor(
       case "geoRss" => geoRssProperty
       case _ => newProperty
   }
+
 
   def getDBpediaSameasProperties(property:String) : Set[OntologyProperty] =
   {
@@ -109,5 +110,6 @@ class WikidataR2RExtractor(
     })
     properties
   }
+
 }
 
