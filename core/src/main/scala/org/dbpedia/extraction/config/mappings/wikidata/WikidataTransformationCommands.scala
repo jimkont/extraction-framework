@@ -51,49 +51,53 @@ class WikidataCommandReceiver {
 
     map.foreach {
       keyVal => {
-        if (keyVal._2 != null && keyVal._2.contains("$")) {
-          MapResult += (keyVal._1 -> substitute(keyVal._2, value.toString))
-          /*
+        if (keyVal._2 != null) {
+          if (keyVal._2.contains("$1")) {
+            val v= substitute(keyVal._2, value.toString.replace("\"", "").replace(" ", "_").trim)
+            MapResult += (keyVal._1 -> v)
+          }
+          else {
+            keyVal._2 match {
+              case "$getLatitude" => MapResult += (keyVal._1 -> getLatitude(value).toString)
+              case "$getLongitude" => MapResult += (keyVal._1 -> getLongitude(value).toString)
+              case "$getGeoRss" => MapResult += (keyVal._1 -> getGeoRss(value))
+              case "$getSpatialThing"  =>  MapResult += (keyVal._1 -> "$getSpatialThing")
+              case _=>
+            }
 
-          * */
-          if (value.isInstanceOf[GlobeCoordinatesValue]){
-            val method = Class.forName(value.getClass.getName).getMethod("getLongitude")
 
           }
 
-
-//           value.getClass().getMethods.foreach {
-//            method => println(method.getName)
-//          }
-/*          value match {
-            case v: GlobeCoordinatesValue => {
-              if (keyVal._1.endsWith("type")) {
-                MapResult += (keyVal._1 -> substitute(keyVal._2, "spatialThing"))
-              } else if (keyVal._1.endsWith("lat")) {
-                MapResult += (keyVal._1 -> substitute(keyVal._2, v.getLatitude.toString))
-              } else if (keyVal._1.endsWith("long")) {
-                MapResult += (keyVal._1 -> substitute(keyVal._2, v.getLongitude.toString))
-              } else if (keyVal._1.endsWith("point")) {
-                MapResult += (keyVal._1 -> substitute(keyVal._2, v.getLatitude.toString + " " + v.getLongitude.toString))
-              }
-            }
-            case _ => {
-              MapResult += (keyVal._1 -> substitute(keyVal._2, value.toString))
-            }
-          }*/
-
         }
         else {
-          MapResult += (keyVal._1 -> value.toString)
+          MapResult += (keyVal._1 -> value.toString.replace("(item)", "").replace("\"", "").trim)
         }
       }
     }
 
   }
 
+ def getLatitude(value:Value) = value match {
+    case v:GlobeCoordinatesValue => {
+      v.getLatitude
+    }
+ }
+
+  def getLongitude(value:Value) = value match {
+    case v:GlobeCoordinatesValue => {
+      v.getLongitude
+    }
+  }
+
+  def getGeoRss(value:Value) = value match {
+    case v:GlobeCoordinatesValue => {
+      v.getLatitude + " " + v.getLongitude
+    }
+  }
 
   def substitute(newValue: String, value: String): String = {
-    newValue.replace("$1", value)
+      newValue.replace("$1", value)
+
   }
 
 }

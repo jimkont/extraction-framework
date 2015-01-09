@@ -1,0 +1,153 @@
+{ 
+  "P625": [
+     {"rdf:type":"$getSpatialThing"},
+     {"geo:lat":"$getLatitude"},
+     {"geo:long": "$getLongitude"},
+     {"georss:point":"$getGeoRss"}
+   ],
+  
+  "P434": {"owl:sameAs" :"http://musicbrainz.org/artist/$1"},
+  "P435": {"owl:sameAs" : "http://musicbrainz.org/work/$1"},
+  "P436": {"owl:sameAs" : "http://musicbrainz.org/release-group/$1"},
+  "P982": {"owl:sameAs": "http://musicbrainz.org/area/$1"},
+  "P966": {"owl:sameAs": "http://musicbrainz.org/label/$1"},
+  "P1004": {"owl:sameAs": "http://musicbrainz.org/place/$1"},
+  "P661": {"owl:sameAs": "http://rdf.chemspider.com/$1"},
+  "P227": {"owl:sameAs": "http://d-nb.info/gnd/$1/about/rdf"},
+  "P244": {"owl:sameAs": "http://id.loc.gov/authorities/names/$1"},
+  "P269": {"owl:sameAs": "http://www.idref.fr/$1/id"},
+  "P349": {"owl:sameAs":"http://id.ndl.go.jp/auth/ndla/$1"},
+  "P646": {"owl:sameAs":"http://freebase.com/$1"},
+  "P662": {"owl:sameAs": "http://pubchem.ncbi.nlm.nih.gov/rest/rdf/compound/$1"},
+  "P214": {"owl:sameAs": "http://viaf.org/viaf/$1"},
+  "P638": "pdb", 
+  
+  "P10": [
+     {"thumbnail": "http://commons.wikimedia.org/wiki/Special:FilePath/$1?width=300"},
+     {"foaf:depiction":"http://commons.wikimedia.org/wiki/Special:FilePath/$1"}
+    ],
+  "P109": [
+     {"thumbnail":"http://commons.wikimedia.org/wiki/Special:FilePath/$1?width=300"},
+     {"foaf:depiction":"http://commons.wikimedia.org/wiki/Special:FilePath/$1"}
+    ],
+  "P117": [
+     {"thumbnail":"http://commons.wikimedia.org/wiki/Special:FilePath/$1?width=300"},
+     {"foaf:depiction": "http://commons.wikimedia.org/wiki/Special:FilePath/$1"}
+    ],
+  "P14": [
+     {"thumbnail": "http://commons.wikimedia.org/wiki/Special:FilePath/$1?width=300"},
+     {"foaf:depiction":"http://commons.wikimedia.org/wiki/Special:FilePath/$1"}
+    ],
+  "P15": [
+     {"thumbnail": "http://commons.wikimedia.org/wiki/Special:FilePath/$1?width=300"},
+     {"foaf:depiction":"http://commons.wikimedia.org/wiki/Special:FilePath/$1"}
+    ],
+  "P154": [
+     {"thumbnail": "http://commons.wikimedia.org/wiki/Special:FilePath/$1?width=300"},
+     {"foaf:depiction":"http://commons.wikimedia.org/wiki/Special:FilePath/$1"}
+    ],
+  "P158": [
+     {"thumbnail":"http://commons.wikimedia.org/wiki/Special:FilePath/$1?width=300"},
+     {"foaf:depiction":"http://commons.wikimedia.org/wiki/Special:FilePath/$1"}
+    ],
+  "P18": [
+     {"thumbnail":"http://commons.wikimedia.org/wiki/Special:FilePath/$1?width=300"},
+     {"foaf:depiction":"http://commons.wikimedia.org/wiki/Special:FilePath/$1"}
+    ],
+  "P181": [
+     {"thumbnail": " http://commons.wikimedia.org/wiki/Special:FilePath/$1?width=300"},
+     {"foaf:depiction": "http://commons.wikimedia.org/wiki/Special:FilePath/$1"}
+    ],
+  "P207": [
+     {"thumbnail": "http://commons.wikimedia.org/wiki/Special:FilePath/$1?width=300"},
+     {"foaf:depiction": "http://commons.wikimedia.org/wiki/Special:FilePath/$1"}
+    ],
+  "P242": [
+     {"thumbnail" : "http://commons.wikimedia.org/wiki/Special:FilePath/$1?width=300"},
+     {"foaf:depiction" : "http://commons.wikimedia.org/wiki/Special:FilePath/$1"}
+    ], 
+  "P367": [
+     {"thumbnail" : "http://commons.wikimedia.org/wiki/Special:FilePath/$1?width=300"},
+     {"foaf:depiction": "http://commons.wikimedia.org/wiki/Special:FilePath/$1"}
+    ],
+  "P368": [
+     {"thumbnail": "http://commons.wikimedia.org/wiki/Special:FilePath/$1?width=300"},
+     {"foaf:depiction": "http://commons.wikimedia.org/wiki/Special:FilePath/$1"}
+    ],
+  "P41": [
+     {"thumbnail" : "http://commons.wikimedia.org/wiki/Special:FilePath/$1?width=300"},
+     {"foaf:depiction" : "http://commons.wikimedia.org/wiki/Special:FilePath/$1"}
+    ],
+  "P443": [
+     {"thumbnail": "http://commons.wikimedia.org/wiki/Special:FilePath/$1?width=300"},
+     {"foaf:depiction": "http://commons.wikimedia.org/wiki/Special:FilePath/$1"}
+    ],
+  "P491": [
+     {"thumbnail" : "http://commons.wikimedia.org/wiki/Special:FilePath/$1?width=300"},
+     {"foaf:depiction": "http://commons.wikimedia.org/wiki/Special:FilePath/$1"}
+    ],
+  "P51": [
+     {"thumbnail" : "http://commons.wikimedia.org/wiki/Special:FilePath/$1?width=300"},
+     {"foaf:depiction": "http://commons.wikimedia.org/wiki/Special:FilePath/$1"}
+    ], 
+  "P623": [
+     {"thumbnail":"http://commons.wikimedia.org/wiki/Special:FilePath/$1?width=300"},
+     {"foaf:depiction" : "http://commons.wikimedia.org/wiki/Special:FilePath/$1"}
+    ],
+  "P692": [
+     {"thumbnail" :"http://commons.wikimedia.org/wiki/Special:FilePath/$1?width=300"},
+     {"foaf:depiction": "http://commons.wikimedia.org/wiki/Special:FilePath/$1"}
+    ],
+  "P94": [
+     {"thumbnail" : "http://commons.wikimedia.org/wiki/Special:FilePath/$1?width=300"},
+     {"foaf:depiction" : "http://commons.wikimedia.org/wiki/Special:FilePath/$1"}
+    ],
+   
+  "P102": "party",
+  "P106": "occupation",
+  "P108": "employer", 
+  "P1215": "apparentMagnitude",
+  "P131" : "city", 
+  "P140" : "religion", 
+  "P149" : "architecturalStyle", 
+  "P155": "follows",
+  "P156": "followedBy",
+  "P157": "killedBy",
+  "P161": "starring",
+  "P166": "award",
+  "P172": "ethnicity",
+  "P175": "artist",
+  "P17" : "country",
+  "P19" : "birthPlace",
+  "P20" : "deathPlace",
+  "P21" : "sex",
+  "P229" : "iataAirlineCode",
+  "P230":  "icaoAirlineCode",
+  "P238" : "iataLocationIdentifier",
+  "P239" : "icaoLocationIdentifier", 
+  "P263" :  "residence",
+  "P264": "recordLabel",
+  "P27" : "citizenship",
+  "P31" : "type",
+  "P345": "imdbId",
+  "P364" : "originalLanguage",
+  "P473": "areaCode",
+  "P509":"causeOfDeath",
+  "P50" : "author", 
+  "P513" : "birthName",
+  "P54" :"team",
+  "P569" : "birthDate",
+  "P570": "deathDate",
+  "P575": "discovered",
+  "P57" : "director",
+  "P61" : "discoverer",
+  "P69" : "almaMater",
+  "P70" : "order",
+  "P71" : "family",
+  "P74" : "genus",
+  "P84" : "architect",
+  "P85": "anthem",
+  "P91": "orientation"
+       
+}
+
