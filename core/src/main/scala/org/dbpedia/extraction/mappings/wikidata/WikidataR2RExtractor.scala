@@ -66,10 +66,7 @@ class WikidataR2RExtractor(
         try {
           val ontologyProperty = context.ontology.properties(propertyValue._1)
           val datatype = null
-          if (propertyValue._2 == "$getSpatialThing")
-            quads +=new Quad(context.language, WikidataTestDataSet, subjectUri, ontologyProperty, geoSpatialThing.toString, page.wikiPage.sourceUri,datatype)
-          else
-            quads +=new Quad(context.language, WikidataTestDataSet, subjectUri, ontologyProperty, propertyValue._2, page.wikiPage.sourceUri,datatype)
+          quads +=new Quad(context.language, WikidataTestDataSet, subjectUri, ontologyProperty, propertyValue._2, page.wikiPage.sourceUri,datatype)
         } catch {
           case e:Exception => println("exception caught: " + e)
         }

@@ -1,6 +1,6 @@
 { 
   "P625": [
-     {"rdf:type":"$getSpatialThing"},
+     {"rdf:type":"http://www.w3.org/2003/01/geo/wgs84_pos#GeoSpationThing"},
      {"geo:lat":"$getLatitude"},
      {"geo:long": "$getLongitude"},
      {"georss:point":"$getGeoRss"}
