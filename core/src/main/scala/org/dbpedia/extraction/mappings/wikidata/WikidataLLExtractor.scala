@@ -1,13 +1,13 @@
 package org.dbpedia.extraction.mappings
 
+import org.dbpedia.extraction.destinations.{Dataset, Quad}
 import org.dbpedia.extraction.ontology.Ontology
 import org.dbpedia.extraction.util.Language
-import org.dbpedia.extraction.destinations.{Dataset, Quad, DBpediaDatasets}
-import org.dbpedia.extraction.wikiparser.{WikiTitle, JsonNode, Namespace, PageNode}
-import collection.mutable.ArrayBuffer
-import scala.language.reflectiveCalls
+import org.dbpedia.extraction.wikiparser.{JsonNode, Namespace, WikiTitle}
+
 import scala.collection.JavaConversions._
-import org.dbpedia.extraction.wikiparser.Namespace
+import scala.collection.mutable.ArrayBuffer
+import scala.language.reflectiveCalls
 
 /*
 * Extract Wikidata sitelinks on the form of

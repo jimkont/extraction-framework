@@ -1,8 +1,8 @@
 package org.dbpedia.extraction.mappings
 
-import org.dbpedia.extraction.destinations.{Dataset, DBpediaDatasets, Quad}
+import org.dbpedia.extraction.destinations.{Dataset, Quad}
 import org.dbpedia.extraction.ontology.Ontology
-import org.dbpedia.extraction.util.{WikidataUtil, Language}
+import org.dbpedia.extraction.util.{Language, WikidataUtil}
 import org.dbpedia.extraction.wikiparser.JsonNode
 import org.wikidata.wdtk.datamodel.interfaces.ValueSnak
 

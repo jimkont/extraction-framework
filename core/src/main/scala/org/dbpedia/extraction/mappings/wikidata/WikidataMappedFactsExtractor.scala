@@ -1,13 +1,14 @@
 package org.dbpedia.extraction.mappings
 
-import org.dbpedia.extraction.ontology.{OntologyProperty, Ontology}
+import org.dbpedia.extraction.destinations.{DBpediaDatasets, Quad}
+import org.dbpedia.extraction.ontology.{Ontology, OntologyProperty}
 import org.dbpedia.extraction.util.Language
-import org.dbpedia.extraction.destinations.{Quad, DBpediaDatasets}
-import org.dbpedia.extraction.wikiparser.{JsonNode}
+import org.dbpedia.extraction.wikiparser.JsonNode
 import org.wikidata.wdtk.datamodel.interfaces._
-import collection.mutable.ArrayBuffer
-import scala.language.reflectiveCalls
+
 import scala.collection.JavaConversions._
+import scala.collection.mutable.ArrayBuffer
+import scala.language.reflectiveCalls
 
 /**
 * wikidata to dbpedia mapping for  1 to 1 (replace case)

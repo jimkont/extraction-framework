@@ -1,13 +1,14 @@
 package org.dbpedia.extraction.mappings
 
+import org.dbpedia.extraction.destinations.{DBpediaDatasets, Dataset, Quad}
 import org.dbpedia.extraction.ontology._
-import org.dbpedia.extraction.util.{WikidataUtil, Language}
-import org.dbpedia.extraction.destinations.{Dataset, Quad, DBpediaDatasets}
-import org.dbpedia.extraction.wikiparser.{JsonNode}
+import org.dbpedia.extraction.util.{Language, WikidataUtil}
+import org.dbpedia.extraction.wikiparser.JsonNode
 import org.wikidata.wdtk.datamodel.interfaces._
-import collection.mutable.ArrayBuffer
-import scala.language.reflectiveCalls
+
 import scala.collection.JavaConversions._
+import scala.collection.mutable.ArrayBuffer
+import scala.language.reflectiveCalls
 
 
 /**
