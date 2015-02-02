@@ -48,8 +48,7 @@ class WikidataFactsExtractor(
 
     for ((statementGroup) <- page.wikiDataItem.getStatementGroups) {
       val claim = statementGroup.getStatements().get(0).getClaim()
-      val property = WikidataUtil.replacePropertyId(claim.getMainSnak().getPropertyId().toString()).
-        replace("http://data.dbpedia.org/resource/","http://www.wikidata.org/entity/")
+      val property = WikidataUtil.replacePropertyId(claim.getMainSnak().getPropertyId().toString())
 
       claim.getMainSnak() match {
         case mainSnak:ValueSnak => {

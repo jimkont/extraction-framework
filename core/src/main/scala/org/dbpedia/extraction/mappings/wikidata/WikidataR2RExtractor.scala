@@ -41,7 +41,7 @@ class WikidataR2RExtractor(
         statement => {
           val claim = statement.getClaim()
           val property = WikidataUtil.replacePropertyId(claim.getMainSnak().getPropertyId().toString).
-            replace("http://data.dbpedia.org/resource/", "").trim
+            replace(WikidataUtil.wikidataDBpNamespace, "").trim
 
           claim.getMainSnak() match {
             case mainSnak: ValueSnak => {
