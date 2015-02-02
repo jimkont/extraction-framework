@@ -1,7 +1,7 @@
 package org.dbpedia.extraction.mappings
 
 import org.dbpedia.extraction.ontology._
-import org.dbpedia.extraction.util.Language
+import org.dbpedia.extraction.util.{WikidataUtil, Language}
 import org.dbpedia.extraction.destinations.{Dataset, Quad, DBpediaDatasets}
 import org.dbpedia.extraction.wikiparser.{JsonNode}
 import org.wikidata.wdtk.datamodel.interfaces._
@@ -47,14 +47,14 @@ class WikidataFactsExtractor(
 
     for ((statementGroup) <- page.wikiDataItem.getStatementGroups) {
       val claim = statementGroup.getStatements().get(0).getClaim()
-      val property = claim.getMainSnak().getPropertyId().toString().replace("(PropertyId)", "").
+      val property = WikidataUtil.replacePropertyId(claim.getMainSnak().getPropertyId().toString()).
         replace("http://data.dbpedia.org/resource/","http://www.wikidata.org/entity/")
 
       claim.getMainSnak() match {
         case mainSnak:ValueSnak => {
           mainSnak.getValue() match {
             case value:ItemIdValue => {
-              val fact=value.toString().replace("(ItemId)","")
+              val fact=WikidataUtil.replaceItemId(value.toString)
               quads += new Quad(context.language, DBpediaDatasets.WikidataFacts, subjectUri, property, fact, page.wikiPage.sourceUri, null)
             }
 
@@ -64,9 +64,9 @@ class WikidataFactsExtractor(
                 val fact = "http://commons.wikimedia.org/wiki/File:" + value.toString.replace(" ","_").replace("(String)","").trim()
                 quads += new Quad(context.language, DBpediaDatasets.WikidataFacts, subjectUri, property, fact, page.wikiPage.sourceUri,null)
               } else {
-                val fact = value.toString.replace("(String)","").trim()
+                val fact = WikidataUtil.replaceString(value.toString)
                 quads += new Quad(context.language, DBpediaDatasets.WikidataFacts, subjectUri, property,
-                  fact, page.wikiPage.sourceUri,context.ontology.datatypes("xsd:string"))
+                  WikidataUtil.replacePunctuation(fact), page.wikiPage.sourceUri,context.ontology.datatypes("xsd:string"))
               }
             }
 

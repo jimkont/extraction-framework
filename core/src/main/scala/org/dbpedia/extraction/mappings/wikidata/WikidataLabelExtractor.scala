@@ -2,10 +2,9 @@ package org.dbpedia.extraction.mappings
 
 
 import org.dbpedia.extraction.ontology.Ontology
-import org.dbpedia.extraction.util.Language
+import org.dbpedia.extraction.util.{WikidataUtil, Language}
 import org.dbpedia.extraction.destinations.{Quad, DBpediaDatasets}
-import org.dbpedia.extraction.wikiparser.{JsonNode, PageNode}
-import org.wikidata.wdtk.datamodel.interfaces.MonolingualTextValue
+import org.dbpedia.extraction.wikiparser.{JsonNode}
 import collection.mutable.ArrayBuffer
 import scala.language.reflectiveCalls
 import scala.collection.JavaConversions._
@@ -23,9 +22,6 @@ class WikidataLabelExtractor(
                          )
   extends JsonNodeExtractor {
   // Here we define all the ontology predicates we will use
-  private val isPrimaryTopicOf = context.ontology.properties("foaf:isPrimaryTopicOf")
-  private val primaryTopic = context.ontology.properties("foaf:primaryTopic")
-  private val dcLanguage = context.ontology.properties("dc:language")
   private val labelProperty = context.ontology.properties("rdfs:label")
 
 
@@ -37,10 +33,11 @@ class WikidataLabelExtractor(
     val quads = new ArrayBuffer[Quad]()
 
     for ((lang, value) <- page.wikiDataItem.getLabels) {
-      val literalWithoutLang = value.toString.replace("("+lang+")", "").trim()
+      val literalWithoutLang = WikidataUtil.replacePunctuation(value.toString, lang)
       Language.get(lang) match
       {
-        case Some(dbpedia_lang) => quads += new Quad(dbpedia_lang, DBpediaDatasets.WikidataLabels, subjectUri, labelProperty,literalWithoutLang , page.wikiPage.sourceUri, context.ontology.datatypes("rdf:langString"))
+        case Some(dbpedia_lang) => quads += new Quad(dbpedia_lang, DBpediaDatasets.WikidataLabels,
+          subjectUri, labelProperty,literalWithoutLang , page.wikiPage.sourceUri, context.ontology.datatypes("rdf:langString"))
         case _=>
       }
     }

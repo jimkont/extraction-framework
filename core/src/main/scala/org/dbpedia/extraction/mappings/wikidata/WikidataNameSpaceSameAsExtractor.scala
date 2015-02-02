@@ -20,9 +20,6 @@ class WikidataNameSpaceSameAsExtractor(
   extends JsonNodeExtractor
 {
   // Here we define all the ontology predicates we will use
-  private val isPrimaryTopicOf = context.ontology.properties("foaf:isPrimaryTopicOf")
-  private val primaryTopic = context.ontology.properties("foaf:primaryTopic")
-  private val dcLanguage = context.ontology.properties("dc:language")
   private val sameAsProperty = context.ontology.properties("owl:sameAs")
 
   // this is where we will store the output

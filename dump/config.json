@@ -128,7 +128,6 @@
   "P263" :  "residence",
   "P264": "recordLabel",
   "P27" : "citizenship",
-  "P31" : "type",
   "P345": "imdbId",
   "P364" : "originalLanguage",
   "P473": "areaCode",
@@ -148,6 +147,4 @@
   "P84" : "architect",
   "P85": "anthem",
   "P91": "orientation"
-       
 }
-

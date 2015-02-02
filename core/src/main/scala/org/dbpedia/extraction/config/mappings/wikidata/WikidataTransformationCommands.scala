@@ -61,8 +61,7 @@ class WikidataCommandReceiver {
               case "$getLatitude" => MapResult += (keyVal._1 -> getLatitude(value).toString)
               case "$getLongitude" => MapResult += (keyVal._1 -> getLongitude(value).toString)
               case "$getGeoRss" => MapResult += (keyVal._1 -> getGeoRss(value))
-              case "$getSpatialThing"  =>  MapResult += (keyVal._1 -> "$getSpatialThing")
-              case _=>
+              case _=> MapResult += (keyVal._1 -> keyVal._2)
             }
 
 

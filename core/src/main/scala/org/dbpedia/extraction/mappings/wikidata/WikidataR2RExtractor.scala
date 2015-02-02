@@ -5,7 +5,7 @@ import java.io._
 import org.dbpedia.extraction.config.mappings.wikidata._
 import org.dbpedia.extraction.destinations.{Dataset, Quad}
 import org.dbpedia.extraction.ontology.{Ontology}
-import org.dbpedia.extraction.util.Language
+import org.dbpedia.extraction.util.{WikidataUtil, Language}
 import org.dbpedia.extraction.wikiparser.JsonNode
 import org.wikidata.wdtk.datamodel.interfaces._
 
@@ -25,11 +25,10 @@ class WikidataR2RExtractor(
                             )
   extends JsonNodeExtractor
 {
-  private val geoSpatialThing = context.ontology.classes("geo:SpatialThing")
 
   // this is where we will store the output
-  val WikidataTestDataSet = new Dataset("wikidata-r2r")
-  override val datasets = Set(WikidataTestDataSet)
+  val WikidataR2RDataSet = new Dataset("wikidata-r2r")
+  override val datasets = Set(WikidataR2RDataSet)
 
   val config:WikidataExtractorConfig= WikidataExtractorConfigFactory.createConfig("config.json")
 
@@ -39,22 +38,26 @@ class WikidataR2RExtractor(
     val quads = new ArrayBuffer[Quad]()
     val receiver:WikidataCommandReceiver = new WikidataCommandReceiver
 
-
     for ((statementGroup) <- page.wikiDataItem.getStatementGroups) {
-      val claim = statementGroup.getStatements().get(0).getClaim()
-      val property = claim.getMainSnak().getPropertyId().toString().replace("(property)", "").
-        replace("http://data.dbpedia.org/resource/", "").trim
-      claim.getMainSnak() match {
-        case mainSnak: ValueSnak => {
-          val value = mainSnak.getValue //.toString.replace("(item)", "").replace("\"", "").trim
-          val command:WikidataTransformationCommands = config.getCommand(property,value, receiver)
-          command.execute()
-          quads ++=getQuad(page, subjectUri, receiver.getMap())
+      statementGroup.getStatements.foreach {
+        statement => {
+          val claim = statement.getClaim()
+          val property = WikidataUtil.replacePropertyId(claim.getMainSnak().getPropertyId().toString).
+            replace("http://data.dbpedia.org/resource/", "").trim
+
+          claim.getMainSnak() match {
+            case mainSnak: ValueSnak => {
+              val value = mainSnak.getValue
+              val command:WikidataTransformationCommands = config.getCommand(property,value, receiver)
+              command.execute()
+              quads ++=getQuad(page, subjectUri, receiver.getMap())
+            }
+
+            case _ =>
+          }
+
         }
-
-        case _ =>
       }
-
     }
     quads
   }
@@ -66,7 +69,7 @@ class WikidataR2RExtractor(
         try {
           val ontologyProperty = context.ontology.properties(propertyValue._1)
           val datatype = null
-          quads +=new Quad(context.language, WikidataTestDataSet, subjectUri, ontologyProperty, propertyValue._2, page.wikiPage.sourceUri,datatype)
+          quads +=new Quad(context.language, WikidataR2RDataSet, subjectUri, ontologyProperty, propertyValue._2, page.wikiPage.sourceUri,datatype)
         } catch {
           case e:Exception => println("exception caught: " + e)
         }
