@@ -1,13 +1,14 @@
 package org.dbpedia.extraction.mappings
 
-import org.dbpedia.extraction.ontology.{OntologyProperty, Ontology}
-import org.dbpedia.extraction.util.Language
-import org.dbpedia.extraction.destinations.{Quad, DBpediaDatasets}
-import org.dbpedia.extraction.wikiparser.{JsonNode}
+import org.dbpedia.extraction.destinations.{DBpediaDatasets, Quad}
+import org.dbpedia.extraction.ontology.{Ontology, OntologyProperty}
+import org.dbpedia.extraction.util.{WikidataUtil, Language}
+import org.dbpedia.extraction.wikiparser.JsonNode
 import org.wikidata.wdtk.datamodel.interfaces._
-import collection.mutable.ArrayBuffer
-import scala.language.reflectiveCalls
+
 import scala.collection.JavaConversions._
+import scala.collection.mutable.ArrayBuffer
+import scala.language.reflectiveCalls
 
 /**
 * wikidata to dbpedia mapping for  1 to 1 (replace case)
@@ -52,7 +53,7 @@ class WikidataMappedFactsExtractor(
             }
             case value:StringValue => {
               val fact = value.toString.replace("(String)","").trim()
-              val propID=property.replace("http://data.dbpedia.org/resource/","")
+              val propID=property.replace(WikidataUtil.wikidataDBpNamespace,"")
               getDBpediaSameasProperties(property).foreach{ dbProp =>
                 if (commonMediaFilesProperties.contains(propID)){
                   val fileURI = "http://commons.wikimedia.org/wiki/File:" + fact.toString.replace(" ","_")
@@ -86,7 +87,7 @@ class WikidataMappedFactsExtractor(
 
   def getDBpediaSameasProperties(property:String) : Set[OntologyProperty] =
   {
-    val p = property.replace("http://data.dbpedia.org/resource","http://wikidata.dbpedia.org/resource")
+    val p = property
     var properties = Set[OntologyProperty]()
     context.ontology.equivalentPropertiesMap.foreach({map =>
       if (map._1.toString.matches(p)) {

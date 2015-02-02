@@ -1,7 +1,6 @@
 package org.dbpedia.extraction.mappings
 
 import org.dbpedia.extraction.destinations.{Dataset, Quad}
-import org.dbpedia.extraction.mappings.{PageContext, JsonNodeExtractor}
 import org.dbpedia.extraction.ontology.Ontology
 import org.dbpedia.extraction.util.{Language, WikidataUtil}
 import org.dbpedia.extraction.wikiparser.JsonNode
@@ -74,7 +73,7 @@ class WikidataReificationExtractor(
   }
 
   def getStatementUri(subject:String, property:String,itemId:String):String = {
-    subject+"_"+ property.replace("http://data.dbpedia.org/resource/", "").trim+"_" + itemId.replace("http://data.dbpedia.org/resource/","")
+    subject+"_"+ property.replace(WikidataUtil.wikidataDBpNamespace, "").trim+"_" + itemId.replace(WikidataUtil.wikidataDBpNamespace,"")
   }
 
   def splitQualifier(qualifier:String):Map[String,String] = {

@@ -1,17 +1,16 @@
 package org.dbpedia.extraction.wikiparser.impl.json
 
-import org.dbpedia.extraction.sources.WikiPage
-import org.dbpedia.extraction.wikiparser.{Node, PageNode, WikiTitle,JsonNode}
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.dbpedia.extraction.sources.WikiPage
+import org.dbpedia.extraction.util.WikidataUtil
+import org.dbpedia.extraction.wikiparser.JsonNode
 import org.json.JSONObject
 import org.wikidata.wdtk.datamodel.implementation.DataObjectFactoryImpl
 import org.wikidata.wdtk.datamodel.interfaces.ItemDocument
 import org.wikidata.wdtk.datamodel.json.jackson.JacksonItemDocument
 import org.wikidata.wdtk.dumpfiles.oldjson.JsonConverter
-import scala.collection.mutable.{ArrayBuffer, HashMap}
-import scala.util.matching.Regex
 
-import JsonWikiParser._
+import scala.util.matching.Regex
 
 
 /**
@@ -50,10 +49,10 @@ class JsonWikiParser {
         println(itemDocument.getStatementGroups)
         Some(new JsonNode(page,itemDocument))
       } catch {
-        case exception => {
+        case exception: Throwable => {
           val IntRegEx = new Regex("(\\d+)")
           val jsonObject : JSONObject  = new JSONObject(page.source)
-          val jsonConverter = new JsonConverter("http://data.dbpedia.org/resource/", new DataObjectFactoryImpl())
+          val jsonConverter = new JsonConverter(WikidataUtil.wikidataDBpNamespace, new DataObjectFactoryImpl())
           val Some(title) = IntRegEx findFirstIn page.title.toString()
           val itemDocument : ItemDocument = jsonConverter.convertToItemDocument(jsonObject, "Q"+title)
           Some(new JsonNode(page,itemDocument))
@@ -61,6 +60,5 @@ class JsonWikiParser {
     }
     }
   }
-
 }
   

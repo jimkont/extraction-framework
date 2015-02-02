@@ -19,4 +19,6 @@ object WikidataUtil {
   def replaceString(str:String):String = {
     str.replace("(String)","").trim()
   }
+
+  val wikidataDBpNamespace = Language("wikidata").resourceUri.namespace
 }

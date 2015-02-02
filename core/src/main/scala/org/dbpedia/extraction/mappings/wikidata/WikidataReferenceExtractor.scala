@@ -1,9 +1,8 @@
 package org.dbpedia.extraction.mappings
 
-import org.dbpedia.extraction.destinations.{Dataset, DBpediaDatasets, Quad}
-import org.dbpedia.extraction.mappings.{JsonNodeExtractor, PageContext}
+import org.dbpedia.extraction.destinations.{Dataset, Quad}
 import org.dbpedia.extraction.ontology.Ontology
-import org.dbpedia.extraction.util.{WikidataUtil, Language}
+import org.dbpedia.extraction.util.{Language, WikidataUtil}
 import org.dbpedia.extraction.wikiparser.JsonNode
 import org.wikidata.wdtk.datamodel.interfaces.ValueSnak
 
@@ -34,8 +33,8 @@ class WikidataReferenceExtractor(
             for (i <- references.indices) {
               for (reference <- references.get(i).getAllSnaks) {
                 val referenceProperty = WikidataUtil.replacePropertyId(reference.getPropertyId.toString)
-                val reference_id = subjectUri + "_" + property.replace("http://data.dbpedia.org/resource/", "").trim + "_" +
-                  referenceProperty.replace("http://data.dbpedia.org/resource/", "").trim + "_ref"
+                val reference_id = subjectUri + "_" + property.replace(WikidataUtil.wikidataDBpNamespace, "").trim + "_" +
+                  referenceProperty.replace(WikidataUtil.wikidataDBpNamespace, "").trim + "_ref"
                 quads += new Quad(context.language, WikidataReferenceDataSet, subjectUri, property, reference_id, page.wikiPage.sourceUri, null)
                 reference match {
                   case snak: ValueSnak => {

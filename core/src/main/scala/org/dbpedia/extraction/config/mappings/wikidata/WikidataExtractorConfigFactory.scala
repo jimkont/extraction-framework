@@ -7,6 +7,8 @@ import org.wikidata.wdtk.datamodel.interfaces.Value
 import com.fasterxml.jackson.core.JsonFactory
 import com.fasterxml.jackson.databind.{JsonNode, ObjectReader, ObjectMapper}
 import scala.collection.JavaConversions._
+import scala.language.postfixOps
+
 /**
  * Created by ali on 12/20/14.
  */

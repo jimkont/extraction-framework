@@ -1,13 +1,13 @@
 package org.dbpedia.extraction.mappings
 
+import org.dbpedia.extraction.destinations.{Dataset, Quad}
 import org.dbpedia.extraction.ontology.Ontology
 import org.dbpedia.extraction.util.Language
-import org.dbpedia.extraction.destinations.{Dataset, Quad, DBpediaDatasets}
-import org.dbpedia.extraction.wikiparser.{WikiTitle, JsonNode, Namespace, PageNode}
-import collection.mutable.ArrayBuffer
-import scala.language.reflectiveCalls
+import org.dbpedia.extraction.wikiparser.{JsonNode, Namespace, WikiTitle}
+
 import scala.collection.JavaConversions._
-import org.dbpedia.extraction.wikiparser.Namespace
+import scala.collection.mutable.ArrayBuffer
+import scala.language.reflectiveCalls
 
 /*
 * Extract Wikidata sitelinks on the form of
@@ -38,7 +38,7 @@ class WikidataLLExtractor(
     // This array will hold all the triples we will extract
     val quads = new ArrayBuffer[Quad]()
 
-    for ((wikidataLang, siteLink) <- page.wikiDataItem.getSiteLinks) {
+    for ((wikidataLang, siteLink1) <- page.wikiDataItem.getSiteLinks) {
       val lang1 = wikidataLang.toString().replace("wiki", "")
       if (datasetMap.keys.contains(lang1)) {
         for ((wikidataLang2, siteLink2) <- page.wikiDataItem.getSiteLinks) {
@@ -48,10 +48,10 @@ class WikidataLLExtractor(
               case Some(dbpedia_lang1) => {
                 Language.get(lang2) match {
                   case Some(dbpedia_lang2) => {
-                    val sitelink1 = WikiTitle.parse(siteLink.getPageTitle().toString(), dbpedia_lang1)
-                    val sitelink2 = WikiTitle.parse(siteLink2.getPageTitle().toString(), dbpedia_lang2)
-                    quads += new Quad(context.language, datasetMap(lang1), sitelink1.resourceIri,
-                      sameAsProperty, sitelink2.resourceIri, page.wikiPage.sourceUri, null)
+                    val title1 = WikiTitle.parse(siteLink1.getPageTitle(), dbpedia_lang1)
+                    val title2 = WikiTitle.parse(siteLink2.getPageTitle(), dbpedia_lang2)
+                    quads += new Quad(context.language, datasetMap(lang1), title1.resourceIri,
+                      sameAsProperty, title2.resourceIri, page.wikiPage.sourceUri, null)
                   }
                   case _ =>
                 }

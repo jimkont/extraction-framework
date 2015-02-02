@@ -1,11 +1,9 @@
 package org.dbpedia.extraction.mappings
 
-import java.io._
-
 import org.dbpedia.extraction.config.mappings.wikidata._
 import org.dbpedia.extraction.destinations.{Dataset, Quad}
-import org.dbpedia.extraction.ontology.{Ontology}
-import org.dbpedia.extraction.util.{WikidataUtil, Language}
+import org.dbpedia.extraction.ontology.Ontology
+import org.dbpedia.extraction.util.{Language, WikidataUtil}
 import org.dbpedia.extraction.wikiparser.JsonNode
 import org.wikidata.wdtk.datamodel.interfaces._
 
@@ -43,7 +41,7 @@ class WikidataR2RExtractor(
         statement => {
           val claim = statement.getClaim()
           val property = WikidataUtil.replacePropertyId(claim.getMainSnak().getPropertyId().toString).
-            replace("http://data.dbpedia.org/resource/", "").trim
+            replace(WikidataUtil.wikidataDBpNamespace, "").trim
 
           claim.getMainSnak() match {
             case mainSnak: ValueSnak => {
