@@ -50,7 +50,7 @@ class JsonWikiParser {
         println(itemDocument.getStatementGroups)
         Some(new JsonNode(page,itemDocument))
       } catch {
-        case exception => {
+        case exception: Throwable => {
           val IntRegEx = new Regex("(\\d+)")
           val jsonObject : JSONObject  = new JSONObject(page.source)
           val jsonConverter = new JsonConverter("http://data.dbpedia.org/resource/", new DataObjectFactoryImpl())

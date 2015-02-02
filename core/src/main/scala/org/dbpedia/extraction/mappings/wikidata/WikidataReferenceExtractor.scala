@@ -1,7 +1,6 @@
 package org.dbpedia.extraction.mappings
 
 import org.dbpedia.extraction.destinations.{Dataset, DBpediaDatasets, Quad}
-import org.dbpedia.extraction.mappings.{JsonNodeExtractor, PageContext}
 import org.dbpedia.extraction.ontology.Ontology
 import org.dbpedia.extraction.util.{WikidataUtil, Language}
 import org.dbpedia.extraction.wikiparser.JsonNode

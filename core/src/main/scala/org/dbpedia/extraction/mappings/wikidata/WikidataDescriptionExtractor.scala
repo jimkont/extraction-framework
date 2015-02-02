@@ -6,6 +6,7 @@ import org.dbpedia.extraction.util.{WikidataUtil, Language}
 import org.dbpedia.extraction.wikiparser.JsonNode
 import scala.collection.JavaConversions._
 import scala.collection.mutable.ArrayBuffer
+import scala.language.reflectiveCalls
 
 /**
  * Created by ali on 7/29/14.
