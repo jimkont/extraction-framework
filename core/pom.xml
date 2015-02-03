@@ -73,7 +73,7 @@
 
         <dependency>
             <groupId>org.scalatest</groupId>
-            <artifactId>scalatest_2.10</artifactId>
+            <artifactId>scalatest_2.11</artifactId>
         </dependency>
 
         <dependency>
@@ -86,15 +86,9 @@
         <dependency>
             <groupId>org.sweble.wikitext</groupId>
             <artifactId>swc-engine</artifactId>
-            <version>1.1.1-SNAPSHOT</version>
+            <version>1.1.1</version>
         </dependency>
 
-	 <dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>2.3.3</version>
-	</dependency>
-	
 	 <dependency>
 		<groupId>org.wikidata.wdtk</groupId>
 		<artifactId>wdtk-dumpfiles</artifactId>
@@ -104,7 +98,7 @@
 	 <dependency>
               <groupId>org.wikidata.wdtk</groupId>
               <artifactId>wdtk-datamodel</artifactId>
-              <version>0.3.0</version>
+              <version>0.2.0</version>
          </dependency>
 
         <dependency>
@@ -112,23 +106,12 @@
             <artifactId>scala-library</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-xml</artifactId>
+        </dependency>
+
     </dependencies>
-
-    <repositories>
-
-        <repository>
-          <id>osr-public-releases</id>
-          <name>OSR Public Releases</name>
-          <url>http://mojo.informatik.uni-erlangen.de/nexus/content/repositories/public-releases</url>
-        </repository>
-
-        <repository>
-          <id>osr-public-snapshots</id>
-          <name>OSR Public snapshots</name>
-          <url>http://mojo.informatik.uni-erlangen.de/nexus/content/repositories/public-snapshots</url>
-        </repository>
-
-    </repositories>
 
 </project>
 
