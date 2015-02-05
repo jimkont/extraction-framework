@@ -40,7 +40,7 @@ object WikidataUtil {
   //Hash function take string, make SHA hash of it.
   def getHashId(value:Value):String={
     val hash_string = value.toString
-    MessageDigest.getInstance("SHA").digest(hash_string.getBytes).toString
+    MessageDigest.getInstance("SHA").digest(hash_string.getBytes).toString.substring(1)
   }
 
   val wikidataDBpNamespace = Language("wikidata").resourceUri.namespace
