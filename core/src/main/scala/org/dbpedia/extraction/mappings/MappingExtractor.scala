@@ -28,7 +28,15 @@ extends PageNodeExtractor
   {
     if(page.title.namespace != Namespace.Main && !ExtractorUtils.titleContainsCommonsMetadata(page.title)) return Seq.empty
 
-    extractNode(page, subjectUri, pageContext)
+    val graph =
+      for { templateNode <- collectTemplates(page) ;
+            g <- resolvedMappings.get(templateNode.title.decoded) match {
+              case Some(mapping) => mapping.extract (templateNode, subjectUri, pageContext)
+              case None => Seq.empty
+            }
+      } yield g
+
+    graph
   }
 
   /**
@@ -64,6 +72,15 @@ extends PageNodeExtractor
     else
     {
       graph
+    }
+  }
+
+  private def collectTemplates(node : Node) : List[TemplateNode] =
+  {
+    node match
+    {
+      case templateNode : TemplateNode => List(templateNode)
+      case _ => node.children.flatMap(collectTemplates)
     }
   }
 }
